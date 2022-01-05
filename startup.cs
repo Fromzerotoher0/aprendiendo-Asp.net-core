@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+
 namespace webApiAutores
 {
     public class Startup
@@ -12,8 +15,13 @@ namespace webApiAutores
         public void configureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "webApiAuthors", Version = "v1" });
+            });
         }
 
         public void configure(IApplicationBuilder app, IWebHostEnvironment env)
